@@ -13,13 +13,21 @@ dotenv.config();
 const config: HardhatUserConfig = {
   solidity: "0.8.4",
   networks: {
+    hardhat: {
+      forking: {
+        url: `https://eth-rinkeby.alchemyapi.io/v2/gOZm7FFG9QppJz1t5eNdrZQXuARK8nit`,
+        blockNumber: 10501673,
+      },
+    },
     rinkeby: {
       url: `https://rinkeby.infura.io/v3/${process.env.INFURA_PRIVATE_KEY}`,
       accounts:
-        process.env.METAMASK_OWNER_PRIVATE_KEY !== undefined ? [
-          process.env.METAMASK_OWNER_PRIVATE_KEY as string,
-          process.env.METAMASK_PRIVATE_KEY as string
-        ] : [],
+        process.env.METAMASK_OWNER_PRIVATE_KEY !== undefined
+          ? [
+              process.env.METAMASK_OWNER_PRIVATE_KEY as string,
+              process.env.METAMASK_PRIVATE_KEY as string,
+            ]
+          : [],
     },
   },
   gasReporter: {
