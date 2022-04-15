@@ -1,7 +1,7 @@
 import { expect } from "chai";
 
 export default (): void => {
-  it("ADD-LIQUIDITY", async function (): Promise<void> {
+  it("LIQUIDITY", async function (): Promise<void> {
     const createPair = await this.instance.createPair(
       this.instanceTokenA.address,
       this.instanceTokenB.address
@@ -30,14 +30,9 @@ export default (): void => {
     const { args: args2 } = addLiquidityEvents.find(
       (it: any) => it.event === "AddLiquidity"
     );
-    const [address, amountA, amountB, liquidity] = args2;
-    const result = [address, +amountA, +amountB, +liquidity];
-    const expectResult = [
-      this.owner.address,
-      this.amount,
-      this.amount,
-      999999999999999000,
-    ];
+    const [amountA, amountB, liquidity] = args2;
+    const result = [+amountA, +amountB, +liquidity];
+    const expectResult = [this.amount, this.amount, 999999999999999000];
 
     expect(result).to.deep.eq(expectResult);
 

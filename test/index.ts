@@ -12,6 +12,8 @@ export default describe("Uniswap adapter testing", async function () {
     this.tokenSymbolA = "TA";
     this.tokenNameB = "Token B";
     this.tokenSymbolB = "TB";
+    this.tokenNameC = "Token C";
+    this.tokenSymbolC = "TC";
   });
   beforeEach(async function () {
     const artifactToken: Artifact = await artifacts.readArtifact("Token");
@@ -27,6 +29,11 @@ export default describe("Uniswap adapter testing", async function () {
       artifactToken,
       [this.tokenNameB, this.tokenSymbolB]
     );
+    this.instanceTokenC = await waffle.deployContract(
+      this.owner,
+      artifactToken,
+      [this.tokenNameC, this.tokenSymbolC]
+    );
     this.instance = await waffle.deployContract(this.owner, artifact);
 
     await this.instanceTokenA.approve(
@@ -34,6 +41,10 @@ export default describe("Uniswap adapter testing", async function () {
       BigInt(this.amount * 2)
     );
     await this.instanceTokenB.approve(
+      this.instance.address,
+      BigInt(this.amount * 2)
+    );
+    await this.instanceTokenC.approve(
       this.instance.address,
       BigInt(this.amount * 2)
     );

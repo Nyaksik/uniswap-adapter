@@ -9,15 +9,33 @@ import "@openzeppelin/contracts/interfaces/IERC20.sol";
 contract UniswapAdapter {
     using SafeERC20 for IERC20;
 
-    event AddLiquidity(
-        address indexed to,
-        uint256 amountA,
-        uint256 amountB,
-        uint256 liquidity
-    );
+    /**
+     * Emitted when liquidity is added
+     * @param amountA - amountA added to the pool
+     * @param amountB - amountA added to the pool
+     * @param liquidity - amount of liquidity tokens
+     */
+    event AddLiquidity(uint256 amountA, uint256 amountB, uint256 liquidity);
+
+    /**
+     * Emitted when liquidity is removed
+     * @param amountA - amountA removed to the pool
+     * @param amountB - amountA removed to the pool
+     */
     event RemoveLiquidity(uint256 amountA, uint256 amountB);
+
+    /**
+     * Emitted when pair is created
+     * @param pair - pair address
+     */
     event CreatePair(address indexed pair);
-    event Swap(uint256[] amounts);
+
+    /**
+     * Emitted when tokens are swapped
+     * @param to - address of the recipient
+     * @param amounts - array of token amounts
+     */
+    event Swap(address indexed to, uint256[] amounts);
 
     address private constant FACTORY =
         0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f;
@@ -25,6 +43,11 @@ contract UniswapAdapter {
         0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D;
     address private constant WETH = 0xc778417E063141139Fce010982780140Aa0cD5Ab;
 
+    /**
+     * Function to get liquidity amount
+     * @param pair - pair address
+     * @return liquidity - amount of liquidity
+     */
     function getLiquidity(address pair)
         public
         view
@@ -33,20 +56,38 @@ contract UniswapAdapter {
         liquidity = IERC20(pair).balanceOf(address(this));
     }
 
+    /**
+     * Function to get the address of a pair
+     * @param tokenA - address of token A
+     * @param tokenB - address of token B
+     * @return pair - pair address
+     */
     function getPair(address tokenA, address tokenB)
-        external
+        public
         view
         returns (address pair)
     {
         pair = IUniswapV2Factory(FACTORY).getPair(tokenA, tokenB);
     }
 
+    /**
+     * Function to generate the address of a pair
+     * @param tokenA - address of token A
+     * @param tokenB - address of token B
+     */
     function createPair(address tokenA, address tokenB) external {
         address pair = IUniswapV2Factory(FACTORY).createPair(tokenA, tokenB);
-        
+
         emit CreatePair(pair);
     }
 
+    /**
+     * Function to add liquidity
+     * @param tokenA - address of token A
+     * @param tokenB - address of token B
+     * @param amountADesired - desired amount of token A
+     * @param amountBDesired - desired amount of token B
+     */
     function addLiquidity(
         address tokenA,
         address tokenB,
@@ -82,9 +123,14 @@ contract UniswapAdapter {
                 block.timestamp
             );
 
-        emit AddLiquidity(msg.sender, amountA, amountB, liquidity);
+        emit AddLiquidity(amountA, amountB, liquidity);
     }
 
+    /**
+     * Function to remove liquidity
+     * @param tokenA - address of token A
+     * @param tokenB - address of token B
+     */
     function removeLiquidity(address tokenA, address tokenB) external {
         address pair = IUniswapV2Factory(FACTORY).getPair(tokenA, tokenB);
         uint256 liquidity = getLiquidity(pair);
@@ -105,11 +151,19 @@ contract UniswapAdapter {
         emit RemoveLiquidity(amountA, amountB);
     }
 
+    /**
+     * Function for swapping tokens
+     * @param tokenIn - incoming token
+     * @param tokenOut - received token
+     * @param amountIn - incoming token amount
+     */
     function swap(
         address tokenIn,
         address tokenOut,
         uint256 amountIn
     ) external {
+        require(getPair(tokenIn, tokenOut) != address(0x0), "No pair");
+
         IERC20(tokenIn).safeTransferFrom(msg.sender, address(this), amountIn);
         IERC20(tokenIn).approve(ROUTER, amountIn);
 
@@ -127,6 +181,6 @@ contract UniswapAdapter {
                 block.timestamp
             );
 
-        emit Swap(amounts);
+        emit Swap(msg.sender, amounts);
     }
 }

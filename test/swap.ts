@@ -2,7 +2,7 @@ import { expect } from "chai";
 
 export default (): void => {
   it("SWAP", async function (): Promise<void> {
-    await this.instance.getPair(
+    await this.instance.createPair(
       this.instanceTokenA.address,
       this.instanceTokenB.address
     );
@@ -28,7 +28,7 @@ export default (): void => {
     const { events } = await swap.wait();
 
     const { args } = events.find((it: any) => it.event === "Swap");
-    const [amounts] = args;
+    const [address, amounts] = args;
 
     const balanceAfterSwapA = await this.instanceTokenA.balanceOf(
       this.owner.address
@@ -37,11 +37,21 @@ export default (): void => {
       this.owner.address
     );
 
+    expect(this.owner.address).to.eq(address);
     expect(BigInt(balanceAfterSwapA)).to.eq(
       BigInt(balanceA) - BigInt(amounts[0])
     );
     expect(BigInt(balanceAfterSwapB)).to.eq(
       BigInt(balanceB) + BigInt(amounts[1])
     );
+  });
+  it("SWAP-REVERT", async function (): Promise<void> {
+    await expect(
+      this.instance.swap(
+        this.instanceTokenA.address,
+        this.instanceTokenB.address,
+        this.swapAmount
+      )
+    ).to.be.revertedWith("No pair");
   });
 };
