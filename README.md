@@ -1,5 +1,9 @@
 # Advanced Sample Hardhat Project
 
+ttps://rinkeby.etherscan.io/address/0x0db677e78042C9085fA72D003B599ae823B4eFd8 uniswap adapter
+https://rinkeby.etherscan.io/address/0xBeBd29D3D052540F997fE1FC930EdD870C7F5E84 token tst
+0x6d5Aa83c4dD8b0A4B46fE6c81A97BC0A55DB0EF6 token acdm
+0x809f13c8ED42E127BA7AE53EC40d640660CD7EED token pop
 This project demonstrates an advanced Hardhat use case, integrating other tools commonly used alongside Hardhat in the ecosystem.
 
 The project comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts. It also comes with a variety of other tools, preconfigured to work with the project code.

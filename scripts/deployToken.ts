@@ -1,12 +1,12 @@
 import { ethers } from "hardhat";
 
 async function main(): Promise<void> {
-  const name = "TokenTST";
-  const symbol = "TST";
+  const name = "TokenPOP";
+  const symbol = "POP";
   const Token = await ethers.getContractFactory("Token");
   const token = await Token.deploy(name, symbol);
 
-  token.deployed();
+  await token.deployed();
 
   console.log(`TokenERC20 has been deployed with an address ${token.address}`);
 }

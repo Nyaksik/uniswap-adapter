@@ -6,7 +6,7 @@ import "@nomiclabs/hardhat-waffle";
 import "@typechain/hardhat";
 import "hardhat-gas-reporter";
 import "solidity-coverage";
-// import "./task/tasks"
+import "./task/task";
 
 dotenv.config();
 
@@ -15,7 +15,7 @@ const config: HardhatUserConfig = {
   networks: {
     hardhat: {
       forking: {
-        url: `https://eth-rinkeby.alchemyapi.io/v2/gOZm7FFG9QppJz1t5eNdrZQXuARK8nit`,
+        url: `https://eth-rinkeby.alchemyapi.io/v2/${process.env.ALCHEMY_PRIVATE_KEY}`,
         blockNumber: 10501673,
       },
     },

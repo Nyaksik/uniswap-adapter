@@ -71,7 +71,7 @@ contract UniswapAdapter {
     }
 
     /**
-     * Function to generate the address of a pair
+     * Function to create a pair
      * @param tokenA - address of token A
      * @param tokenB - address of token B
      */

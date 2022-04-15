@@ -5,7 +5,9 @@
     "start": "npx hardhat node",
     "compile": "npx hardhat clean && npx hardhat compile",
     "local": "npx hardhat run scripts/deploy.ts --network localhost",
+    "token-local": "npx hardhat run scripts/deployToken.ts --network localhost",
     "rinkeby": "npx hardhat run scripts/deploy.ts --network rinkeby",
+    "token-rinkeby": "npx hardhat run scripts/deployToken.ts --network rinkeby",
     "coverage": "npx hardhat coverage",
     "help": "npx hardhat help"
   },
